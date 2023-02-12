@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../dist/output.css" rel="stylesheet" />
+  </head>
+
+  <body onload="fillData()">
+    <div class="flex flex-row">
+      <div name="content" class="flex w-full justify-center bg-gray-50">
+        <div class="p-11 pt-28 w-full">
+          <div
+            class="w-full max-w-4xl px-6 py-4 mx-auto bg-white rounded-md shadow-md"
+          >
+            <!-- HEADLINE -->
+            <h2
+              class="text-3xl font-semibold text-center text-gray-800"
+              id="name_recipe"
+            >
+              Name
+            </h2>
+            <!-- Subheadline   -->
+            <div class="text-center" id="subheadline">
+              <a href=""
+                ><span class="mt-5 mr-3 align-middle text-gray-600">
+                  <!-- Untertitel -->
+                </span></a
+              >
+            </div>
+
+            <img id="stored-image" class="max-h-16" />
+
+            <div class="mt-6">
+              <div class="">
+                <table class="text-sm" id="table_Zutaten">
+                  <thead class="text-xs">
+                    <tr>
+                      <th
+                        scope="col"
+                        class="text-right block mb-2 text-sm font-medium text-gray-600"
+                      >
+                        Zutat
+                      </th>
+                      <th scope="col" class=""></th>
+                      <th scope="col" class=""></th>
+                      <th
+                        scope="col"
+                        class="block mb-2 text-sm font-medium text-gray-600"
+                      >
+                        Anweisung
+                      </th>
+                    </tr>
+                  </thead>
+
+                  <tbody
+                    id="table_Zutaten_Body"
+                    class="font-medium text-gray-600 overflow-scroll"
+                  ></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="card.js"></script>
+  </body>
+</html>
