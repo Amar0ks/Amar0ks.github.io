@@ -6,20 +6,35 @@
     <link href="../dist/output.css" rel="stylesheet" />
   </head>
 
-  <body onload="fillData()">
+  <body onload="fillData()" class="bg-gray-50">
+    <!-- Print -->
     <div class="flex flex-row">
-      <div name="content" class="flex w-full justify-center bg-gray-50">
-        <div class="p-11 pt-28 w-full">
+      <div class="absolute p-3 right-2">
+        <button
+          id="printPageButton"
+          onclick="window.print()"
+          class="bg-yellow-200 text-yellow-900 py-2 px-4 rounded shadow hover:shadow-xl hover:bg-yellow-300 duration-300"
+        >
+          Print your recipe
+        </button>
+      </div>
+
+      <div name="content" class="flex w-full h-max justify-center">
+        <div class="p-11 pt-24 w-full">
           <div
             class="w-full max-w-4xl px-6 py-4 mx-auto bg-white rounded-md shadow-md"
           >
             <!-- HEADLINE -->
-            <h2
-              class="text-3xl font-semibold text-center text-gray-800"
-              id="name_recipe"
-            >
-              Name
-            </h2>
+            <div class="">
+              <h2
+                class="text-3xl font-semibold text-center text-gray-800"
+                id="name_recipe"
+              >
+                Name
+              </h2>
+              <img id="stored-image" class="max-h-16" />
+            </div>
+
             <!-- Subheadline   -->
             <div class="text-center" id="subheadline">
               <a href=""
@@ -28,8 +43,6 @@
                 </span></a
               >
             </div>
-
-            <img id="stored-image" class="max-h-16" />
 
             <div class="mt-6">
               <div class="">
@@ -42,7 +55,7 @@
                       >
                         Zutat
                       </th>
-                      <th scope="col" class=""></th>
+                      <th scope="col" class="align-middle px"></th>
                       <th scope="col" class=""></th>
                       <th
                         scope="col"

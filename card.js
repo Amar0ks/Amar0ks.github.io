@@ -74,7 +74,7 @@ function splitZutaten(Zutaten) {
 
       // Sucht Unit
       const regex_units =
-        /^ ?(?:Becher|Bund|c|cl|cm|cup|dl|dl|Dose|EL|etwas|fl|fl|g|g|g|gal|gehäuft|groß|h|in|inch|k|kg|kl|kleine|l|lb|Liter|m|m|ml|mm|ounce|oz|oz|p|Pck|pound|Prise|pt|Scheibe|spritzer|st|Stange|t|Tasse|TL|tsp|wenig|Zehe).? /i;
+        /^ ?(?:Becher|Bund|c|cl|cm|cup|dl|dl|Dose|EL|el|etwas|fl|fl|g|g|g|gal|gehäuft|groß|h|in|inch|k|kg|kl|kleine|l|lb|Liter|m|m|ml|mm|ounce|oz|oz|p|Packung|Pck|pound|Prise|pt|Scheibe|spritzer|st|Stange|t|Tasse|TL|tsp|wenig|Zehe|zehe|Zehen).? /i;
       var unit = lines[x].match(regex_units);
       if (unit === null) {
         unit = " ";
@@ -210,7 +210,7 @@ function creatRecipeTable(recipeData) {
 
     if (Array.isArray(recipeData[index])) {
       var cell_Zutat = document.createElement("td");
-      cell_Zutat.classList.add("px-4", "text-right");
+      cell_Zutat.classList.add("px-4", "py-4", "text-right");
 
       var cell_Menge = document.createElement("td");
       cell_Menge.classList.add("text-right");
@@ -236,11 +236,11 @@ function creatRecipeTable(recipeData) {
     var cell_Anweisung = document.createElement("td");
     cell_Anweisung.classList.add(
       "px-6",
+      "py-4",
       "w-96",
       "text-left",
-      "block",
-      "mb-2",
-      "text-sm"
+      "text-sm",
+      "align-middle"
     );
     cell_Anweisung.appendChild(document.createTextNode(recipeData[index]));
     cell_Anweisung.innerHTML = cell_Anweisung.innerHTML + ".";
