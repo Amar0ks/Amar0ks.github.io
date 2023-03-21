@@ -251,3 +251,43 @@ function creatRecipeTable(recipeData) {
   table.appendChild(tableBody);
   // document.body.appendChild(table);
 }
+
+// ***************************************
+// img
+
+const imgElement = document.getElementById("stored-image");
+let isDragging = false;
+let startingX;
+let startingY;
+let xOffset = 0;
+let yOffset = 0;
+let zoomFactor = 1;
+
+imgElement.addEventListener("mousedown", (event) => {
+  isDragging = true;
+  startingX = event.clientX - xOffset;
+  startingY = event.clientY - yOffset;
+});
+
+imgElement.addEventListener("mouseup", () => {
+  isDragging = false;
+});
+
+imgElement.addEventListener("mousemove", (event) => {
+  if (isDragging) {
+    const currentX = event.clientX - startingX;
+    const currentY = event.clientY - startingY;
+    xOffset = currentX;
+    yOffset = currentY;
+    imgElement.style.transform = `translate(${xOffset}px, ${yOffset}px) scale(${zoomFactor})`;
+  }
+});
+
+imgElement.addEventListener("wheel", (event) => {
+  if (event.ctrlKey) {
+    event.preventDefault();
+    zoomFactor += event.deltaY * -0.0005;
+    zoomFactor = Math.max(0.1, zoomFactor);
+    imgElement.style.transform = `translate(${xOffset}px, ${yOffset}px) scale(${zoomFactor})`;
+  }
+});
