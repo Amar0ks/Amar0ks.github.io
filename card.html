@@ -20,11 +20,13 @@
       </div>
 
       <div name="content" class="flex w-full h-max justify-center">
-        <div class="p-11 w-full">
+        <!-- DIV welches gedruckt wird -->
+        <div id="print" class="p-2 w-210mm max-w-210mm">
           <div
-            class="w-full max-w-4xl px-6 py-4 mx-auto bg-white rounded-md shadow-md"
+            class="w-full max-w-4xl px-6 mx-auto bg-white rounded-md shadow-md"
           >
-            <div class="w-full h-44 overflow-hidden bg-stone-300">
+            <!-- BILD -->
+            <div id="imageDiv" class="w-full h-44 overflow-hidden bg-stone-300">
               <img id="stored-image" class="w-full" draggable="false" />
             </div>
             <br />
@@ -39,17 +41,17 @@
             </div>
 
             <!-- Subheadline   -->
-            <div class="text-center" id="subheadline">
+            <!-- <div class="text-center" id="subheadline">
               <a href=""
                 ><span class="mt-5 mr-3 align-middle text-gray-600">
-                  <!-- Untertitel -->
+                  
                 </span></a
               >
-            </div>
+            </div> -->
 
             <div class="mt-6">
-              <div class="">
-                <table class="text-sm" id="table_Zutaten">
+              <div class="flex justify-center items-center">
+                <table class="text-sm" id="table_Zutaten" contenteditable>
                   <thead class="text-xs">
                     <tr>
                       <th

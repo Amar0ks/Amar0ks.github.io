@@ -513,46 +513,8 @@ video {
   --tw-backdrop-sepia:  ;
 }
 
-.container {
-  width: 100%;
-}
-
-@media (min-width: 640px) {
-  .container {
-    max-width: 640px;
-  }
-}
-
-@media (min-width: 768px) {
-  .container {
-    max-width: 768px;
-  }
-}
-
-@media (min-width: 1024px) {
-  .container {
-    max-width: 1024px;
-  }
-}
-
-@media (min-width: 1280px) {
-  .container {
-    max-width: 1280px;
-  }
-}
-
-@media (min-width: 1536px) {
-  .container {
-    max-width: 1536px;
-  }
-}
-
 .absolute {
   position: absolute;
-}
-
-.relative {
-  position: relative;
 }
 
 .right-2 {
@@ -610,13 +572,13 @@ video {
   display: table;
 }
 
-.hidden {
-  display: none;
-}
-
 .h-max {
   height: -moz-max-content;
   height: max-content;
+}
+
+.h-44 {
+  height: 11rem;
 }
 
 .h-screen {
@@ -627,20 +589,16 @@ video {
   height: 16rem;
 }
 
-.h-60 {
-  height: 15rem;
-}
-
-.h-44 {
-  height: 11rem;
-}
-
-.max-h-16 {
-  max-height: 4rem;
+.h-20 {
+  height: 5rem;
 }
 
 .w-full {
   width: 100%;
+}
+
+.w-210mm {
+  width: 210mm;
 }
 
 .w-96 {
@@ -649,6 +607,10 @@ video {
 
 .w-12 {
   width: 3rem;
+}
+
+.w-40 {
+  width: 10rem;
 }
 
 .max-w-4xl {
@@ -706,9 +668,19 @@ video {
   background-color: rgb(254 240 138 / var(--tw-bg-opacity));
 }
 
+.bg-red-600 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(220 38 38 / var(--tw-bg-opacity));
+}
+
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+.bg-stone-300 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(214 211 209 / var(--tw-bg-opacity));
 }
 
 .bg-gray-700 {
@@ -721,23 +693,17 @@ video {
   background-color: rgb(252 165 165 / var(--tw-bg-opacity));
 }
 
-.bg-gray-100 {
+.bg-gray-400 {
   --tw-bg-opacity: 1;
-  background-color: rgb(243 244 246 / var(--tw-bg-opacity));
-}
-
-.bg-orange-700 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(194 65 12 / var(--tw-bg-opacity));
-}
-
-.bg-stone-300 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(214 211 209 / var(--tw-bg-opacity));
+  background-color: rgb(156 163 175 / var(--tw-bg-opacity));
 }
 
 .p-3 {
   padding: 0.75rem;
+}
+
+.p-2 {
+  padding: 0.5rem;
 }
 
 .p-11 {
@@ -772,10 +738,6 @@ video {
 .py-1 {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
-}
-
-.pt-24 {
-  padding-top: 6rem;
 }
 
 .pt-28 {
@@ -884,6 +846,15 @@ video {
 @media print {
   #printPageButton {
     display: none;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  #print,
+  #print * {
+    visibility: visible;
   }
 }
 
