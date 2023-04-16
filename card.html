@@ -6,7 +6,10 @@
     <link href="../dist/output.css" rel="stylesheet" />
   </head>
 
-  <body onload="fillData()" class="bg-gray-50">
+  <body
+    onload="fillData(localStorage.getItem('Name'),localStorage.getItem('Zutaten'),localStorage.getItem('Beschreibung'),localStorage.getItem('image'))"
+    class="bg-gray-50"
+  >
     <!-- Print -->
     <div class="flex flex-row">
       <div class="absolute p-3 right-2">
@@ -35,6 +38,7 @@
               <h2
                 class="text-3xl font-semibold text-center text-gray-800"
                 id="name_recipe"
+                contenteditable
               >
                 Name
               </h2>

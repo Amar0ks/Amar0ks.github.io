@@ -70,3 +70,10 @@ document.getElementById("myForm").addEventListener("submit", function (e) {
 
 document.getElementById("testme").addEventListener("click", testdata);
 document.getElementById("btn_clear").addEventListener("click", cleardata);
+
+function fillDataFromStorage() {
+  document.getElementById("Name").value = localStorage.getItem("Name");
+  document.getElementById("Zutaten").value = localStorage.getItem("Zutaten");
+  document.getElementById("Beschreibung").value =
+    localStorage.getItem("Beschreibung");
+}

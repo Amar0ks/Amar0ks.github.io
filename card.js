@@ -1,25 +1,21 @@
-// function fillData() {
-//   var test = localStorage.getItem("recipe_1");
-//   console.log(test);
-// }
+// var rezept_name = localStorage.getItem("Name");
+// var zutaten = localStorage.getItem('Zutaten');
+// var beschreibung = localStorage.getItem('Beschreibung');
+// var encodedImage = localStorage.getItem('image');
 
-var rezept_name = localStorage.getItem("Name");
-var zutaten = localStorage.getItem("Zutaten");
-var beschreibung = localStorage.getItem("Beschreibung");
-var encodedImage = localStorage.getItem("image");
-
-function fillData() {
+function fillData(rezept_name, zutaten, beschreibung, encodedImage) {
+  document.getElementById("name_recipe").innerHTML = rezept_name;
   var aufgeteilteZutaten = splitZutaten(zutaten);
   var aufgeteilteAnweisung = splitAnweisung(beschreibung);
-  var ready = match(aufgeteilteZutaten, aufgeteilteAnweisung);
-  console.log(ready);
-
-  document.getElementById("name_recipe").innerHTML = rezept_name;
   if (encodedImage) {
     document.getElementById("stored-image").src = encodedImage;
   } else {
+    // falls kein Bild vorhanden: ImageDiv nicht anzeigen
     document.getElementById("imageDiv").style.display = "none";
   }
+
+  var ready = match(aufgeteilteZutaten, aufgeteilteAnweisung);
+  console.log(ready);
   creatRecipeTable(ready);
 }
 
@@ -76,7 +72,7 @@ function splitZutaten(Zutaten) {
 
       // Sucht Unit
       const regex_units =
-        /^ ?(?:Becher|Bund|c|cl|cm|cup|dl|dl|Dose|EL|el|etwas|fl|fl|g|g|g|gal|gehäuft|groß|h|in|inch|k|kg|kl|kleine|l|lb|Liter|m|m|ml|mm|ounce|oz|oz|p|Packung|Pck|pound|Prise|pt|Scheibe|spritzer|st|Stange|t|Tasse|TL|tsp|wenig|Zehe|zehe|Zehen|Zweig|zweig|Zweige|zweige).? /i;
+        /^ ?(?:Becher|Bund|c|cl|cm|cup|dl|dl|Dose|EL|el|etwas|fl|fl|g|g|g|gal|gehäuft|groß|h|in|inch|k|kg|kl|kleine|l|lb|Liter|m|m|ml|mm|ounce|oz|oz|p|Packung|Pck|pound|Prise|pt|Scheibe|spritzer|st|Stange|t|Tasse|TL|tsp|wenig|Zehe|zehe|Zehen|zehen|Zweig|zweig|Zweige|zweige|rote|Rote|Gelbe|gelbe|Blaue|blaue|Grüne|grüne|orange|Orange).? /i;
       var unit = lines[x].match(regex_units);
       if (unit === null) {
         unit = " ";
@@ -145,18 +141,27 @@ function splitAnweisung(anweisungen) {
   const regex = / {2,}/gm;
   anweisungen = anweisungen.replace(regex, " ");
 
-  // Leercounter und counter mit ausschließlich Leerzeichen werden gekürzt
+  // Leerzeilen und Zeilen mit ausschließlich Leerzeichen werden gekürzt
   const regex_a = /^\n|^ +\n|^ /gm;
   anweisungen = anweisungen.replace(regex_a, "");
 
-  // Entfernen aller counterumbrüche
+  // Entfernen aller Zeilenumbrüche
   const regex_b = /\n/gm;
   anweisungen = anweisungen.replace(regex_b, "");
 
-  // Zerteile counter am counterumbruch, loop über alle counter einzeln
-  // Linux uses \n for a new-line, Windows \r\n and old Macs \r
-  var regex_break = /[.]/gm;
+  // Zerteile Zeilen am "." , loop über alle zeilen einzeln
+  // Außnahme Zahlenangaben mit Puntk 1.5 0.5
+  // oder ca. min. ...
+  var regex_break = /(?<!ca|min)\.(?!\d)/gm;
   var lines = anweisungen.split(regex_break);
+
+  // Leerzeilen (falls mehrere Punkte da sind bzw. die letzte Zeile) werden gekürzt
+  for (var i = 0; i < lines.length; i++) {
+    if (lines[i] === "") {
+      lines.splice(i, 1);
+      i--;
+    }
+  }
 
   return lines;
 }
@@ -208,50 +213,121 @@ function creatRecipeTable(recipeData) {
   var tableBody = document.getElementById("table_Zutaten_Body");
 
   for (let index = 0; index < recipeData.length; index++) {
-    var row = document.createElement("tr");
+    var zutatenCounter;
 
     if (Array.isArray(recipeData[index])) {
-      var cell_Zutat = document.createElement("td");
-      cell_Zutat.classList.add("px-4", "py-2", "text-right");
+      zutatenCounter = recipeData[index].length;
 
-      var cell_Menge = document.createElement("td");
-      cell_Menge.classList.add("text-right");
+      let isFirstIteration = true;
 
-      var cell_Einheit = document.createElement("td");
-      cell_Einheit.classList.add("text-left");
+      // Bei null Zaten wird eine Zeile erstellt in der die ersten 4 Spalten leer bleiben
+      if (zutatenCounter === 0) {
+        // Nur eine Anweisungszeile
+        var row = document.createElement("tr");
 
-      recipeData[index].forEach((zutaten) => {
-        cell_Zutat.appendChild(document.createTextNode(zutaten[0]));
-        cell_Zutat.appendChild(document.createElement("br"));
-        cell_Menge.appendChild(document.createTextNode(zutaten[1]));
-        cell_Menge.appendChild(document.createElement("br"));
-        cell_Einheit.appendChild(document.createTextNode(zutaten[2]));
-        cell_Einheit.appendChild(document.createElement("br"));
-      });
-      row.appendChild(cell_Zutat);
-      row.appendChild(cell_Menge);
-      row.appendChild(cell_Einheit);
+        // Definition der Zellen
+        // ***********************
+        var cell_Zutat = document.createElement("td");
+        cell_Zutat.classList.add("px-4", "text-right");
+
+        var cell_Menge = document.createElement("td");
+        cell_Menge.classList.add("text-right");
+
+        var cell_Einheit = document.createElement("td");
+        cell_Einheit.classList.add("text-left");
+
+        var cell_Anweisung = document.createElement("td");
+        cell_Anweisung.classList.add(
+          "px-6",
+          "py-2",
+          "w-96",
+          "text-left",
+          "text-sm",
+          "align-middle"
+        );
+        // ***********************
+
+        cell_Zutat.appendChild(document.createTextNode(""));
+        cell_Menge.appendChild(document.createTextNode(""));
+        cell_Einheit.appendChild(document.createTextNode(""));
+
+        // + Anweisung
+        var rowspanValue = 1;
+        index++;
+
+        cell_Anweisung.setAttribute("rowspan", rowspanValue);
+        cell_Anweisung.appendChild(
+          document.createTextNode(recipeData[index] + ".")
+        );
+
+        row.appendChild(cell_Zutat);
+        row.appendChild(cell_Menge);
+        row.appendChild(cell_Einheit);
+        row.appendChild(cell_Anweisung);
+        tableBody.appendChild(row);
+        index--; // sonst werden Zeilen Übersprungen
+      }
+      // Bei >null Zaten wird normale Zeile erstellt und nur beim ersten durchlauf die Anweisung hinzugefügt
+      else {
+        recipeData[index].forEach((zutaten) => {
+          var row = document.createElement("tr");
+
+          // Definition der Zellen
+          // ***********************
+          var cell_Zutat = document.createElement("td");
+          cell_Zutat.classList.add("px-4", "text-right");
+
+          var cell_Menge = document.createElement("td");
+          cell_Menge.classList.add("text-right");
+
+          var cell_Einheit = document.createElement("td");
+          cell_Einheit.classList.add("text-left");
+
+          var cell_Anweisung = document.createElement("td");
+          cell_Anweisung.classList.add(
+            "px-6",
+            "py-2",
+            "w-96",
+            "text-left",
+            "text-sm",
+            "align-middle"
+          );
+          // ***********************
+
+          cell_Zutat.appendChild(document.createTextNode(zutaten[0]));
+          cell_Menge.appendChild(document.createTextNode(zutaten[1]));
+          cell_Einheit.appendChild(document.createTextNode(zutaten[2]));
+
+          row.appendChild(cell_Zutat);
+          row.appendChild(cell_Menge);
+          row.appendChild(cell_Einheit);
+
+          if (isFirstIteration) {
+            // + Anweisung
+            var rowspanValue = zutatenCounter;
+            index++;
+
+            cell_Anweisung.setAttribute("rowspan", rowspanValue);
+            if (recipeData[index] != "") {
+              cell_Anweisung.appendChild(
+                document.createTextNode(recipeData[index] + ".")
+              );
+            } else {
+              cell_Anweisung.appendChild(
+                document.createTextNode(recipeData[index])
+              );
+            }
+
+            row.appendChild(cell_Anweisung);
+            index--; // sonst werden Zeilen Übersprungen
+            isFirstIteration = false;
+          }
+          tableBody.appendChild(row);
+        });
+      }
     }
-
-    index++;
-
-    var cell_Anweisung = document.createElement("td");
-    cell_Anweisung.classList.add(
-      "px-6",
-      "py-2",
-      "w-96",
-      "text-left",
-      "text-sm",
-      "align-middle"
-    );
-    cell_Anweisung.appendChild(document.createTextNode(recipeData[index]));
-    cell_Anweisung.innerHTML = cell_Anweisung.innerHTML + ".";
-    row.appendChild(cell_Anweisung);
-    tableBody.appendChild(row);
   }
-
   table.appendChild(tableBody);
-  // document.body.appendChild(table);
 }
 
 // ***************************************
@@ -293,3 +369,72 @@ imgElement.addEventListener("wheel", (event) => {
     imgElement.style.transform = `translate(${xOffset}px, ${yOffset}px) scale(${zoomFactor})`;
   }
 });
+
+// **********************************************************************
+// Änderungen zurückspielen
+
+const name_recipe = document.getElementById("name_recipe");
+
+name_recipe.addEventListener("input", (event) => {
+  var data = event.target;
+  var newName = data.innerHTML;
+  localStorage.setItem("Name", newName);
+});
+
+var table = document.getElementById("table_Zutaten");
+table.addEventListener("input", function () {
+  var rows = table.rows;
+  var zutaten = "";
+  var anweisung = "";
+
+  for (var i = 1; i < rows.length; i++) {
+    var cells = rows[i].cells;
+    var zutatenCell = cells[1];
+    var mengeCell = cells[2];
+    var einheitCell = cells[0];
+    var anweisungCell = cells[3];
+    var rowspan = parseInt(zutatenCell.getAttribute("rowspan")) || 1;
+
+    // Skip the next rows with the same zutaten cell
+    if (rowspan > 1) {
+      i += rowspan - 1;
+    }
+
+    // Add the cells to the output
+    if (zutatenCell) {
+      zutaten +=
+        [zutatenCell, mengeCell, einheitCell]
+          .filter((cell) => cell)
+          .map((cell) => cell.textContent.trim())
+          .join(" ") + "\n";
+    }
+
+    if (anweisungCell) {
+      anweisung += anweisungCell.textContent.trim() + "\n";
+    }
+  }
+
+  // console.log("Zutaten: " + zutaten);
+  // console.log("Anweisung: " + anweisung);
+  saveChanges(zutaten, anweisung);
+});
+function saveChanges(zutaten, beschreibung) {
+  localStorage.setItem("Zutaten", zutaten);
+  localStorage.setItem("Beschreibung", beschreibung);
+}
+
+//Blur wird erst ausgelößt wenn man aus der Tabelle klickt
+table.addEventListener("blur", reload);
+function reload() {
+  var zutaten = localStorage.getItem("Zutaten");
+  var beschreibung = localStorage.getItem("Beschreibung");
+
+  var aufgeteilteZutaten = splitZutaten(zutaten);
+  var aufgeteilteAnweisung = splitAnweisung(beschreibung);
+
+  var ready = match(aufgeteilteZutaten, aufgeteilteAnweisung);
+  console.log("new:" + ready);
+  var tableBody = document.getElementById("table_Zutaten_Body");
+  tableBody.innerHTML = "";
+  creatRecipeTable(ready);
+}
